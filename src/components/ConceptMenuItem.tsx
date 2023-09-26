@@ -14,7 +14,7 @@ export function ConceptMenuItem({label, icon, conceptName}: ConceptMenuItemProps
     return (
         <div onClick={onClick} className={clsx("cursor-pointer font-medium p-4 rounded-xl h-8 flex items-center", currentConcept === conceptName ? "bg-blue-100 text-black" : "text-white hover:bg-blue-100 hover:text-black")}>
             <div className="w-10">
-                <FontAwesomeIcon icon={icon}/>
+                <FontAwesomeIcon icon={icon} />
             </div>
             <div className={"hidden md:block"}>
                 {label}
