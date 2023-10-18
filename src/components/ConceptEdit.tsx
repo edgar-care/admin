@@ -1,16 +1,27 @@
 // import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import * as concepts from "./../concepts";
+import * as conceptsRequests from "../graphql"
 import { useForm } from "react-hook-form";
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Field from "./fields/Field";
 import FormErrorPannel from "./FormErrorPannel";
 
 export function ConceptEdit(props: ConceptEditProps) {
     let { concept, id } = useParams();
-
-    const values = {code: "maux_de_tete", advice: "sieste"} //@TODO: REPLACE BY A GET WITH ID
-
+    const [requests, setRequests] = useState<any>(undefined);
+    const [error, setError] = useState<any>(undefined);
+    const [values, setValues] = useState<any>(undefined);
+    const navigate = useNavigate();
+    useEffect(() => {
+        const moduleName = `${concept?.toUpperCase()}_REQUESTS`;
+        setRequests((conceptsRequests as any)[moduleName]);
+        (conceptsRequests as any)[moduleName].get(id).then((response: any) => {
+            setValues(response);
+        }).catch((err: any) => {
+            setError(err);
+        });
+    }, [concept, id, setRequests, setValues, setError]);
     const conceptDefinition = (concepts as any)[concept || '']?.default;
     
     const {
@@ -20,11 +31,17 @@ export function ConceptEdit(props: ConceptEditProps) {
     } = useForm();
     
     const onSubmit = useCallback((data: any) => {
-        alert(JSON.stringify(data))
-    }, []);
-    
-    if (!conceptDefinition || !conceptDefinition?.props?.edit) {
-        return <div>Edition impossible</div>
+        requests.update(id, data).then(() => {
+            navigate(`/${concept}`);
+        }).catch((err: any) => {setError(err)});
+    }, [requests, id, navigate, concept]);
+
+    if (!requests || !values) {
+        return <div>loading</div>
+    }
+
+    if (!conceptDefinition || !conceptDefinition?.props?.edit || error) {
+        return <div>Edition impossible {error}</div>
     }
     
     return (

@@ -1,14 +1,21 @@
-// import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import * as concepts from "./../concepts";
 import { useForm } from "react-hook-form";
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Field from "./fields/Field";
+import * as conceptsRequests from "../graphql"
 import FormErrorPannel from "./FormErrorPannel";
 
 export function ConceptCreate(props: ConceptCreateProps) {
     let { concept } = useParams();
-    
+    const [requests, setRequests] = useState<any>(undefined);
+    const [error, setError] = useState<any>(undefined);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const moduleName = `${concept?.toUpperCase()}_REQUESTS`;
+        setRequests((conceptsRequests as any)[moduleName]);
+    }, [concept, setRequests]);
     const conceptDefinition = (concepts as any)[concept || '']?.default;
     
     const {
@@ -18,11 +25,13 @@ export function ConceptCreate(props: ConceptCreateProps) {
     } = useForm();
     
     const onSubmit = useCallback((data: any) => {
-        alert(JSON.stringify(data))
-    }, []);
+        requests.create(data).then(() => {
+            navigate(`/${concept}`);
+        }).catch((err: any) => {setError(err)});
+    }, [requests, navigate, concept]);
     
-    if (!conceptDefinition || !conceptDefinition?.props?.create) {
-        return <div>Création impossible</div>
+    if (!conceptDefinition || !conceptDefinition?.props?.create || error) {
+        return <div>Création impossible {error}</div>
     }
     
     return (

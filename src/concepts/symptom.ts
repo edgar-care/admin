@@ -1,6 +1,5 @@
 import Listing from "../components/Listing";
 import { faThermometer } from '@fortawesome/free-solid-svg-icons'
-import EmailField from "../components/fields/EmailField";
 
 const symptom = {
     name: "symptom",
@@ -11,13 +10,15 @@ const symptom = {
         columns: [
             {label: "id", kind: "id"},
             {label: "code", kind: "code"},
+            {label: "conseil", kind: "advice"},
+            {label: "nlp", kind: "symptom"},
             {label: "actions", kind: "actions"},
-            {label: "action2s", kind: "actions"},
-            {label: "another", kind: "another"},
         ],
         create: [
-            {label: "email", kind: "email", field: EmailField},
-            {label: "code", kind: "code", helper: "Code du symptom", type: "text"}
+            {label: "code", kind: "code", helper: "Code du symptom", required: true, type: "text"},
+            {label: "symptom", kind: "symptom", helper: "symptom", required: true, type: "text"},
+            {label: "advice", kind: "advice", helper: "Conseil", type: "text"},
+            {label: "question", kind: "question", helper: "question", required: true, type: "text"}
         ],
         edit: [
             {label: "code", kind: "code", helper: "Code du symptom", type: "text"},
