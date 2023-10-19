@@ -2,6 +2,7 @@
 import { useNavigate, useParams } from "react-router-dom";
 import * as conceptsRequests from "../graphql"
 import { useCallback, useEffect, useState } from "react";
+import Button from "./Button";
 
 export function ConceptDetails(props: ConceptDetailsProps) {
     let { concept, id } = useParams();
@@ -31,7 +32,7 @@ export function ConceptDetails(props: ConceptDetailsProps) {
     return (
         <pre>
             {JSON.stringify(values, null, 2)}
-            <div onClick={onReturn}>retour</div>
+            <Button label="retour" onClick={onReturn}/>
         </pre>
     );
 }

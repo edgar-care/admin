@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { useCallback, useEffect, useState } from "react";
 import Field from "./fields/Field";
 import FormErrorPannel from "./FormErrorPannel";
+import Button from "./Button";
 
 export function ConceptEdit(props: ConceptEditProps) {
     let { concept, id } = useParams();
@@ -35,6 +36,8 @@ export function ConceptEdit(props: ConceptEditProps) {
             navigate(`/${concept}`);
         }).catch((err: any) => {setError(err)});
     }, [requests, id, navigate, concept]);
+    
+    const onReturn = useCallback(() => navigate(`/${concept}`), [concept, navigate]);
 
     if (!requests || !values) {
         return <div>loading</div>
@@ -46,7 +49,7 @@ export function ConceptEdit(props: ConceptEditProps) {
     
     return (
         <div className="w-full">
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                 {conceptDefinition?.props?.edit.map((field: any, index: number) => {
                     if (field?.field) return <field.field control={control} errors={errors} defaultValue={(values as any)[field.kind]}/>;
                     return (
@@ -56,7 +59,10 @@ export function ConceptEdit(props: ConceptEditProps) {
                         );
                     }
                 )}
-                <input type="submit" />
+                <div className="flex flex-row gap-2">
+                    <Button submit label="valider"/>
+                    <Button label="retour" onClick={onReturn}/>
+                </div>
             </form>
             <FormErrorPannel errors={errors}/>
         </div>

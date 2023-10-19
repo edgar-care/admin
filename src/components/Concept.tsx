@@ -1,20 +1,16 @@
-// import { useState } from "react";
 import { useParams } from "react-router-dom";
-// import * as concepts from "./../concepts";
-import symptom from "../concepts/symptom";
+import * as concepts from "./../concepts";
 
 export function Concept(props: ConceptProps) {
     let { concept } = useParams();
-    // const [conceptObject, setConceptObject] = useState<any>(undefined);
+    const conceptDefinition = (concepts as any)[concept || '']?.default;
     
-    // import(`../concepts/${concept}`).then((data) => setConceptObject(data.default)).catch((err) => setConceptObject(undefined)); 
     
-    // if (conceptObject === undefined) return (<div>Pas de concept définie</div>)
+    if (conceptDefinition === undefined) return (<div>Pas de concept définie</div>)
 
-    // const conceptObject = Object.keys(concepts).filter((name: string) => concept === name)
     return (
         <div className="w-full">
-            {symptom.component({name: symptom.name, ...symptom.props})}
+            {conceptDefinition.component({name: conceptDefinition.name, ...conceptDefinition.props})}
         </div>
     );
 }

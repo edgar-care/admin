@@ -6,7 +6,7 @@ const symptom = {
     icon: faThermometer,
     component: Listing,
     props: {
-        action: ["create", "update", "delete", "display"],
+        action: ["create", "edit", "delete", "display"],
         columns: [
             {label: "id", kind: "id"},
             {label: "code", kind: "code"},

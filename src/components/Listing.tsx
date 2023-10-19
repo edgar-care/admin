@@ -1,6 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
 import * as conceptsRequests from "../graphql"
 import { useNavigate } from "react-router-dom";
+import Button from "./Button";
+import { faAdd } from '@fortawesome/free-solid-svg-icons'
+import { faPencil } from '@fortawesome/free-solid-svg-icons'
+import { faEye } from '@fortawesome/free-solid-svg-icons'
+import { faTrash } from '@fortawesome/free-solid-svg-icons'
 
 export function Listing({name, columns, action}: ListingProps) {
     const [requests, setRequests] = useState<any>(undefined);
@@ -34,7 +39,7 @@ export function Listing({name, columns, action}: ListingProps) {
     return (
         <div className="flex flex-col space-y-10 w-full">
             <div className={"font-bold text-3xl"}>{name}</div>
-            {action?.includes('create') && <div onClick={onAdd}>ADD</div>}
+            {action?.includes('create') && <Button onClick={onAdd} label="Ajouter" icon={faAdd}/>}
             <table className="bg-white rounded border-2">
                 <thead>
                     <tr>
@@ -59,7 +64,13 @@ export function Listing({name, columns, action}: ListingProps) {
                                         key={col.kind}
                                         className={`border p-1 ${col?.color ? `bg-${col?.color}-500`: 'bg-white'}`}
                                     >
-                                        {col.kind === 'actions' && <div onClick={() => onAction(value?.id, "edit")}>edit</div>}
+                                        {col.kind === 'actions' && 
+                                            <div className="flex gap-2 p-1">
+                                                {action.includes("display") && <Button onClick={() => onAction(value?.id, "")} icon={faEye}/>}
+                                                {action.includes("edit") && <Button onClick={() => onAction(value?.id, "edit")} icon={faPencil}/>}
+                                                {action.includes("delete") && <Button onClick={() => onAction(value?.id, "delete")} icon={faTrash} hoverBackgroundColor={"red-500"}/>}
+                                            </div>
+                                        }
                                         {cellValue}
                                     </td>)
                             })}

@@ -2,6 +2,7 @@
 import { useNavigate, useParams } from "react-router-dom";
 import * as conceptsRequests from "../graphql"
 import { useCallback, useEffect, useState } from "react";
+import Button from "./Button";
 
 export function ConceptDelete(props: ConceptDeleteProps) {
     let { concept, id } = useParams();
@@ -25,11 +26,11 @@ export function ConceptDelete(props: ConceptDeleteProps) {
     }
     
     return (
-        <pre>
-            Voulez vous vraiment supprimer cette element (id: {id})
-            <div className="flex flex-col">
-                <div onClick={onDelete}>confirmer</div>
-                <div onClick={onReturn}>retour</div>
+        <pre className="flex flex-col gap-4">
+            Voulez vous vraiment supprimer cette element (id: {id}) ?
+            <div className="flex flex-row gap-2">
+                <Button onClick={onDelete} label="valider"/>
+                <Button label="retour" onClick={onReturn}/>
             </div>
         </pre>
     );
