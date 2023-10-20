@@ -6,11 +6,16 @@ import { faAdd } from '@fortawesome/free-solid-svg-icons'
 import { faPencil } from '@fortawesome/free-solid-svg-icons'
 import { faEye } from '@fortawesome/free-solid-svg-icons'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
+import { faArrowRight } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-export function Listing({name, columns, action}: ListingProps) {
+export function Listing({name, columns, action, pages}: ListingProps) {
     const [requests, setRequests] = useState<any>(undefined);
     const [error, setError] = useState<any>(undefined);
     const [values, setValues] = useState<any>(undefined);
+    const [totalValues, setTotalValues] = useState<any>(undefined);
+    const [page, setPage] = useState<number>(0);
     const navigate = useNavigate();
     const onAdd = useCallback(() => {
         navigate(`create`);
@@ -24,12 +29,29 @@ export function Listing({name, columns, action}: ListingProps) {
         const moduleName = `${name?.toUpperCase()}_REQUESTS`;
         setRequests((conceptsRequests as any)[moduleName]);
         (conceptsRequests as any)[moduleName].gets().then((response: any) => {
-            setValues(response);
+            setValues(response.slice(page * (pages || 0), page * (pages || 0) + (pages || 0)));
+            setTotalValues(response);
         }).catch((err: any) => {
             setError(err);
         });
-    }, [name, setRequests, setValues, setError]);
+    }, [name, setRequests, setValues, setError, pages, page, setTotalValues]);
     
+    const onPreviousPage = useCallback(() => {
+        if (page - 1 < 0) {
+            return;
+        }
+        setPage(page - 1);
+        setValues(totalValues.slice((page - 1) * (pages || 0), (page - 1) * (pages || 0) + (pages || 0)));
+    }, [pages, page, setPage, totalValues]);
+
+    const onNextPage = useCallback(() => {
+        if (totalValues.length <= (pages || 0) * (page + 1)) {
+            return;
+        }
+        setPage(page + 1);
+        setValues(totalValues.slice((page + 1) * (pages || 0), (page + 1) * (pages || 0) + (pages || 0)));
+    }, [pages, page, setPage, totalValues]);
+
     if (!requests || !values) {
         return <div>loading</div>
     }
@@ -77,7 +99,12 @@ export function Listing({name, columns, action}: ListingProps) {
                         </tr>
                     ))}
                 </tbody>
-        </table>
+            </table>  
+            <div className="w-full justify-end items-center flex flex-row gap-4 text-gray-500">
+                <FontAwesomeIcon icon={faArrowLeft} onClick={onPreviousPage} />
+                <div>{page}</div>
+                <FontAwesomeIcon icon={faArrowRight} onClick={onNextPage} />
+            </div> 
         </div>
     );
 }
@@ -86,6 +113,7 @@ export interface ListingProps {
     name?: string;
     columns?: any;
     action?: any;
+    pages?: number;
 }
 
 export default Listing;
