@@ -12,7 +12,7 @@ z 							?=
 all: install
 
 deploy:
-	@npm run build && aws s3 sync build/ s3://edgar-admin
+	@npm run build && cp .env build/ && aws s3 sync build/ s3://edgar-admin
 
 build:
 	@npm run build
