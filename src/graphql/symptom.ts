@@ -30,7 +30,7 @@ export const SYMPTOM_REQUESTS = {
     },
     create: (data: any) => {
         return sendQuery("createSymptom",
-            `mutation createSymtom($code: String!, $symptom: [String!]!, $advice: String, $question: String!) {
+            `mutation createSymptom($code: String!, $symptom: [String!]!, $advice: String, $question: String!) {
                 createSymptom(code: $code, symptom: $symptom, advice: $advice, question: $question) {
                     id
                 }
@@ -48,7 +48,7 @@ export const SYMPTOM_REQUESTS = {
     },
     update: (id: string, data: any) => {
         return sendQuery("updateSymptom",
-            `mutation updateSymtom($id: String!, $code: String, $symptom: [String!], $advice: String, $question: String) {
+            `mutation updateSymptom($id: String!, $code: String, $symptom: [String!], $advice: String, $question: String) {
                 updateSymptom(id: $id, code: $code, symptom: $symptom, advice: $advice, question: $question) {
                     id
                 }

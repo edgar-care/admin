@@ -1,5 +1,6 @@
 import Listing from "../components/Listing";
 import { faThermometer } from '@fortawesome/free-solid-svg-icons'
+import ArrayCell from "../components/cells/ArrayCell";
 
 const symptom = {
     name: "symptom",
@@ -12,7 +13,7 @@ const symptom = {
             {label: "id", kind: "id"},
             {label: "code", kind: "code"},
             {label: "conseil", kind: "advice"},
-            {label: "nlp", kind: "symptom"},
+            {label: "nlp", kind: "symptom", customComponent: ArrayCell},
             {label: "actions", kind: "actions"},
         ],
         create: [
@@ -23,7 +24,8 @@ const symptom = {
         ],
         edit: [
             {label: "code", kind: "code", helper: "Code du symptom", type: "text"},
-            {label: "advice", kind: "advice", helper: "Conseil", type: "text"}
+            {label: "advice", kind: "advice", helper: "Conseil", type: "text"},
+            {label: "nlp", kind: "symptom", type: "text"},
         ]
     }
 } as any;

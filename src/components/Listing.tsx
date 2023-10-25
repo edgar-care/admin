@@ -62,48 +62,50 @@ export function Listing({name, columns, action, pages}: ListingProps) {
         <div className="flex flex-col space-y-10 w-full">
             <div className={"font-bold text-3xl"}>{name}</div>
             {action?.includes('create') && <Button onClick={onAdd} label="Ajouter" icon={faAdd}/>}
-            <table className="bg-white rounded border-2">
-                <thead>
-                    <tr>
-                        {columns &&
-                            columns.map((col: any) => (
-                                <th
-                                    key={col.kind}
-                                    className={`border ${col?.size || 'w-auto'} ${col?.color ? `bg-${col?.color}-500`: 'bg-white'}`}
-                                >
-                                    {col.label}
-                                </th>
-                        ))}
-                    </tr>
-                </thead>
-                <tbody>
-                    {values.map((value: any, index: number) => (
-                        <tr key={index}>
-                            {columns.map((col: any) => {
-                                const cellValue = col?.customComponent ? <col.customComponent value={value[col.kind]}/> : <>{value[col.kind]}</>
-                                return (
-                                    <td
+            <div className="flex flex-col gap-2">
+                <table className="bg-white rounded border-2">
+                    <thead>
+                        <tr>
+                            {columns &&
+                                columns.map((col: any) => (
+                                    <th
                                         key={col.kind}
-                                        className={`border p-1 ${col?.color ? `bg-${col?.color}-500`: 'bg-white'}`}
+                                        className={`border ${col?.size || 'w-auto'} ${col?.color ? `bg-${col?.color}-500`: 'bg-white'}`}
                                     >
-                                        {col.kind === 'actions' && 
-                                            <div className="flex gap-2 p-1">
-                                                {action.includes("display") && <Button onClick={() => onAction(value?.id, "")} icon={faEye}/>}
-                                                {action.includes("edit") && <Button onClick={() => onAction(value?.id, "edit")} icon={faPencil}/>}
-                                                {action.includes("delete") && <Button onClick={() => onAction(value?.id, "delete")} icon={faTrash} hoverBackgroundColor={"red-500"}/>}
-                                            </div>
-                                        }
-                                        {cellValue}
-                                    </td>)
-                            })}
+                                        {col.label}
+                                    </th>
+                            ))}
                         </tr>
-                    ))}
-                </tbody>
-            </table>  
-            <div className="w-full justify-end items-center flex flex-row gap-4 text-gray-500">
-                <FontAwesomeIcon icon={faArrowLeft} onClick={onPreviousPage} />
-                <div>{page}</div>
-                <FontAwesomeIcon icon={faArrowRight} onClick={onNextPage} />
+                    </thead>
+                    <tbody>
+                        {values.map((value: any, index: number) => (
+                            <tr key={index}>
+                                {columns.map((col: any) => {
+                                    const cellValue = col?.customComponent ? <col.customComponent value={value[col.kind]}/> : <>{value[col.kind]}</>
+                                    return (
+                                        <td
+                                            key={col.kind}
+                                            className={`border p-1 ${col?.color ? `bg-${col?.color}-500`: 'bg-white'}`}
+                                        >
+                                            {col.kind === 'actions' && 
+                                                <div className="flex gap-2 p-1">
+                                                    {action.includes("display") && <Button onClick={() => onAction(value?.id, "")} icon={faEye}/>}
+                                                    {action.includes("edit") && <Button onClick={() => onAction(value?.id, "edit")} icon={faPencil}/>}
+                                                    {action.includes("delete") && <Button onClick={() => onAction(value?.id, "delete")} icon={faTrash} hoverBackgroundColor={"red-500"}/>}
+                                                </div>
+                                            }
+                                            {cellValue}
+                                        </td>)
+                                })}
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+                <div className="w-full justify-end items-center flex flex-row gap-4 text-gray-500 pr-1">
+                    <FontAwesomeIcon icon={faArrowLeft} onClick={onPreviousPage} />
+                    <div>{page}</div>
+                    <FontAwesomeIcon icon={faArrowRight} onClick={onNextPage} />
+                </div> 
             </div> 
         </div>
     );
